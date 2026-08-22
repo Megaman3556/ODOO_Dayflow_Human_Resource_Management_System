@@ -192,7 +192,7 @@ def register():
         confirm_password = request.form.get("confirm-password")
 
         if password != confirm_password:
-            return "Passwords do not match"
+            return render_template("error.html",message="Passwords do not match")
 
         person=User(
             company_name=company_name,
@@ -226,9 +226,10 @@ def login():
         ).first()
 
         if user:
-            return redirect(url_for("user", employee_id=user.employee_id))
-
-        return "Invalid"
+            if user.role!="HR":
+                return redirect(url_for("user", employee_id=user.employee_id))
+            
+        return render_template("error.html",message="Invalid")
 
 @app.route("/user/<employee_id>")
 def user(employee_id):
@@ -238,7 +239,7 @@ def user(employee_id):
     if user:
         return render_template("dashboard.html", user=user)
 
-    return "User not found"
+    return render_template("error.html",message="User not found")
 
 @app.route("/profile/<emp_id>")
 def profile(emp_id):
@@ -254,7 +255,7 @@ def emp_profile_edit(emp_id):
     user = User.query.filter_by(employee_id=emp_id).first()
 
     if not user:
-        return "User not found"
+        return render_template("error.html",message="User not found")
 
     emp_profile = EmployeeProfile.query.filter_by(
         user_id=user.id
@@ -279,7 +280,7 @@ def emp_leave_request(emp_id):
     user = User.query.filter_by(employee_id=emp_id).first()
 
     if not user:
-        return "User not found"
+        return render_template("error.html",message="User not found")
 
     if request.method == "GET":
         return render_template(
@@ -307,7 +308,7 @@ def emp_leave_request(emp_id):
         db.session.add(leave)
         db.session.commit()
 
-        return "Leave request submitted successfully"
+        return render_template("error.html",message="Leave Request Submitted Successfully")
 
 @app.route("/payroll/<emp_id>")
 def emp_payroll(emp_id):
@@ -324,7 +325,7 @@ def emp_attendance(emp_id):
     ).first()
 
     if not user:
-        return "User not found"
+        return render_template("error.html",message="User Not Found")
 
     attendance = Attendance.query.filter_by(
         user_id=user.id
@@ -345,7 +346,7 @@ def check_in(emp_id):
     ).first()
 
     if not user:
-        return "User not found"
+        return render_template("error.html",message="User Not Found")
 
     today = date.today()
 
@@ -355,7 +356,7 @@ def check_in(emp_id):
     ).first()
 
     if attendance:
-        return "Already checked in today"
+        return render_template("error.html",message="Already Checked in Today")
 
     attendance = Attendance(
         user_id=user.id,
@@ -377,7 +378,7 @@ def check_out(emp_id):
     ).first()
 
     if not user:
-        return "User not found"
+        return render_template("error.html",message="User Not Found")
 
     today = date.today()
 
@@ -387,10 +388,10 @@ def check_out(emp_id):
     ).first()
 
     if not attendance:
-        return "Please check in first"
+        return render_template("error.html",message="Please Check In First")
 
     if attendance.check_out:
-        return "Already checked out today"
+        return render_template("error.html",message="Already Checked Out Today")
 
     attendance.check_out = datetime.now().time()
 
@@ -401,5 +402,6 @@ def check_out(emp_id):
 @app.route("/logout")
 def logout():
     return redirect("/login")
+
 if __name__ == '__main__':
     app.run(debug=True)

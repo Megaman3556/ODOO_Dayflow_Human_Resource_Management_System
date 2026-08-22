@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --success: #10b981;
+            --success-hover: #059669;
+            --success-light: #ecfdf5;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --danger-light: #fef2f2;
+            --primary: #7c3aed;
+            --primary-light: #f5f3ff;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card Setup */
+        .status-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 32px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+        }
+
+        /* Failure Shake Animation */
+        .card-error {
+            animation: shakeEntrance 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        /* Success Scale-in Animation */
+        .card-success {
+            animation: popUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes shakeEntrance {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+            40%, 60% { transform: translate3d(8px, 0, 0); }
+        }
+
+        @keyframes popUp {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Icon Styles */
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .icon-container svg {
+            width: 40px;
+            height: 40px;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: popIn 0.5s ease 0.2s forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Error Theme Elements */
+        .icon-error {
+            background: var(--danger-light);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+            animation: pulseWarning 2s infinite;
+        }
+
+        .icon-error svg {
+            color: var(--danger);
+        }
+
+        @keyframes pulseWarning {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .message-error {
+            background: #fff;
+            border: 1.5px solid rgba(239, 68, 68, 0.25);
+            color: var(--danger);
+        }
+
+        .btn-error {
+            background: linear-gradient(135deg, var(--danger), var(--danger-hover));
+            box-shadow: 0 8px 16px -4px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-error:hover {
+            box-shadow: 0 12px 20px -4px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Success Theme Elements */
+        .icon-success {
+            background: var(--success-light);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            animation: pulseSuccess 2s infinite;
+        }
+
+        .icon-success svg {
+            color: var(--success);
+        }
+
+        @keyframes pulseSuccess {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 16px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .message-success {
+            background: #fff;
+            border: 1.5px solid rgba(16, 185, 129, 0.25);
+            color: #047857;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), var(--success-hover));
+            box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 12px 20px -4px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Common Elements */
+        .status-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .message-box {
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.5s ease 0.3s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% if message in ["Leave Request Submitted Successfully", "Already Checked in Today", "Already Checked Out Today"] %}
+    
+    <!-- GREEN SUCCESS STATE -->
+    <div class="status-card card-success">
+        <div class="icon-container icon-success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+
+        <h1 class="status-title">Success</h1>
+
+        <div class="message-box message-success">
+            {{ message }}
+        </div>
+
+        <a href="javascript:history.back()" class="btn-action btn-success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Continue
+        </a>
+    </div>
+
+    {% else %}
+
+    <!-- RED FAILURE STATE -->
+    <div class="status-card card-error">
+        <div class="icon-container icon-error">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        </div>
+
+        <h1 class="status-title">Action Failed</h1>
+
+        <div class="message-box message-error">
+            {{ message }}
+        </div>
+
+        <a href="javascript:history.back()" class="btn-action btn-error">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Try Again
+        </a>
+    </div>
+
+    {% endif %}
+
+</body>
+
+</html>

@@ -12,7 +12,7 @@ from flask_login import (
 app = Flask(__name__)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///datab.sqlite3"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///company.sqlite3"
 
 db = SQLAlchemy(app) 
 
@@ -30,6 +30,30 @@ class User(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(20), nullable=False)  # employee / hr
     password = db.Column(db.String(255), nullable=False)
+
+class EmployeeProfile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False,
+        unique=True
+    )
+
+    date_of_birth = db.Column(db.Date)
+    gender = db.Column(db.String(20))
+
+    address = db.Column(db.String(255))
+    city = db.Column(db.String(100))
+
+    department = db.Column(db.String(100))
+    designation = db.Column(db.String(100))
+    date_of_joining = db.Column(db.Date)
+    employment_type = db.Column(db.String(50))
+    reporting_manager = db.Column(db.String(100))
+
+    profile_picture = db.Column(db.String(255))
     
 @app.route('/',methods=["GET","POST"])
 def register():
@@ -69,21 +93,21 @@ def login():
 
     if request.method == "GET":
         return render_template("login.html")
+    else:
+        employee_id = request.form.get("employee_id")
+        password = request.form.get("password")
+        role = request.form.get("role")
 
-    email = request.form.get("email")
-    password = request.form.get("password")
-    role = request.form.get("role")
-
-    user = User.query.filter_by(
-        email=email,
+        user = User.query.filter_by(
+        employee_id=employee_id,
         password=password,
         role=role
-    ).first()
+        ).first()
 
-    if user:
-        return redirect(url_for("user", employee_id=user.employee_id))
+        if user:
+            return redirect(url_for("user", employee_id=user.employee_id))
 
-    return "Invalid email, password, or role"
+        return "Invalid"
 
 
 @app.route("/user/<employee_id>")
@@ -92,9 +116,13 @@ def user(employee_id):
     user = User.query.filter_by(employee_id=employee_id).first()
 
     if user:
-        return render_template("user.html", user=user)
+        return render_template("dashboard.html", user=user)
 
     return "User not found"
+
+@app.route("/profile<employee_id>")
+def profile():
+    pass
 
 if __name__ == '__main__':
     app.run(debug=True)

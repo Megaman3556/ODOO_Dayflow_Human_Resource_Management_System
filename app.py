@@ -312,6 +312,15 @@ def admin_payroll():
 @admin_required
 def admin_edit_payroll(emp_id):
     user = User.query.filter_by(employee_id=emp_id).first()
+    if not user:
+        return render_template("error.html", message="User not found")
+
+    emp_profile = EmployeeProfile.query.filter_by(user_id=user.id).first()
+    if not emp_profile:
+        emp_profile = EmployeeProfile(user_id=user.id)
+        db.session.add(emp_profile)
+        db.session.commit()
+
     salary = Salary.query.filter_by(user_id=user.id).first()
     if not salary:
         salary = Salary(user_id=user.id)
@@ -319,13 +328,41 @@ def admin_edit_payroll(emp_id):
         db.session.commit()
 
     if request.method == "POST":
-        salary.cost_to_company_annual = float(request.form.get("cost_to_company_annual", 0))
-        salary.basic_annual = float(request.form.get("basic_annual", 0))
-        salary.hra_annual = float(request.form.get("hra_annual", 0))
-        salary.net_salary_annual = float(request.form.get("net_salary_annual", 0))
+        # --- Personal details ---
+        user.name = request.form.get("name")
+        user.email = request.form.get("email")
+        user.phone = request.form.get("phone")
+
+        # --- Profile details ---
+        dob = request.form.get("date_of_birth")
+        doj = request.form.get("date_of_joining")
+        emp_profile.date_of_birth = datetime.strptime(dob, "%Y-%m-%d").date() if dob else None
+        emp_profile.gender = request.form.get("gender")
+        emp_profile.address = request.form.get("address")
+        emp_profile.city = request.form.get("city")
+        emp_profile.department = request.form.get("department")
+        emp_profile.designation = request.form.get("designation")
+        emp_profile.date_of_joining = datetime.strptime(doj, "%Y-%m-%d").date() if doj else None
+        emp_profile.employment_type = request.form.get("employment_type")
+        emp_profile.reporting_manager = request.form.get("reporting_manager")
+
+        # --- Salary details: annual figures drive the monthly figures ---
+        annual_fields = [
+            "cost_to_company_annual", "basic_annual", "hra_annual", "medical_annual",
+            "special_allowance_annual", "telephone_annual", "conveyance_annual",
+            "ex_gratia_annual", "pf_employer_annual", "pf_employee_annual",
+            "esi_annual", "labor_welfare_annual", "total_annual", "net_salary_annual",
+        ]
+        for field in annual_fields:
+            annual_value = float(request.form.get(field, 0) or 0)
+            setattr(salary, field, annual_value)
+            monthly_field = field.replace("_annual", "_monthly")
+            setattr(salary, monthly_field, round(annual_value / 12, 2))
+
         db.session.commit()
-        return redirect(url_for("admin_payroll"))
-    return render_template("admin_edit_payroll.html", user=user, salary=salary)
+        return redirect(url_for("admin_employees"))
+
+    return render_template("admin_edit_payroll.html", user=user, emp_profile=emp_profile, salary=salary)
 
 if __name__ == '__main__':
     app.run(debug=True)

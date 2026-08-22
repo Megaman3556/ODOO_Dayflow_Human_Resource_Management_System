@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Payroll - HRM</title>
+    <title>Edit Employee - HRM</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -36,7 +36,7 @@
             color: var(--text-dark);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             padding: 40px 15px;
         }
@@ -56,19 +56,13 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
                         0 0 0 1px rgba(255, 255, 255, 0.4) inset;
             width: 100%;
-            max-width: 620px;
+            max-width: 820px;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .top-bar {
@@ -78,17 +72,8 @@
             margin-bottom: 28px;
         }
 
-        .page-title h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .page-title p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+        .page-title h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
+        .page-title p { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
 
         .back-link {
             display: inline-flex;
@@ -104,22 +89,26 @@
             transition: var(--transition);
         }
 
-        .back-link:hover {
-            background: var(--primary);
-            color: white;
+        .back-link:hover { background: var(--primary); color: white; }
+        .back-link svg { width: 16px; height: 16px; stroke-width: 2.5; }
+
+        .section {
+            margin-bottom: 32px;
         }
 
-        .back-link svg {
-            width: 16px;
-            height: 16px;
-            stroke-width: 2.5;
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid var(--border);
         }
 
-        /* Form Controls */
         .form-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 18px;
-            margin-bottom: 28px;
         }
 
         .form-group {
@@ -128,17 +117,9 @@
             gap: 6px;
         }
 
-        label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
 
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
 
         .input-prefix {
             position: absolute;
@@ -148,9 +129,9 @@
             font-size: 0.95rem;
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 12px 14px 12px 32px;
+            padding: 12px 14px;
             border: 1.5px solid var(--border);
             border-radius: 12px;
             font-size: 0.95rem;
@@ -161,12 +142,13 @@
             transition: var(--transition);
         }
 
-        input:focus {
+        .input-wrapper input.with-prefix { padding-left: 32px; }
+
+        input:focus, select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
         }
 
-        /* Update Button */
         .btn-submit {
             display: inline-flex;
             align-items: center;
@@ -190,22 +172,18 @@
             box-shadow: 0 12px 20px -4px rgba(124, 58, 237, 0.5);
         }
 
-        .btn-submit svg {
-            width: 18px;
-            height: 18px;
-            stroke-width: 2.5;
+        .btn-submit svg { width: 18px; height: 18px; stroke-width: 2.5; }
+
+        .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: -6px;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 600px) {
-            .container {
-                padding: 24px 18px;
-            }
-
-            .top-bar {
-                flex-direction: column-reverse;
-                align-items: flex-start;
-                gap: 16px;
-            }
+            .container { padding: 24px 18px; }
+            .top-bar { flex-direction: column-reverse; align-items: flex-start; gap: 16px; }
         }
     </style>
 </head>
@@ -215,10 +193,10 @@
     <div class="container">
         <div class="top-bar">
             <div class="page-title">
-                <h1>Edit Payroll</h1>
-                <p>Updating financial details for <strong>{{ user.name }}</strong></p>
+                <h1>Edit Employee</h1>
+                <p>Updating full record for <strong>{{ user.name }}</strong> ({{ user.employee_id }})</p>
             </div>
-            <a href="/admin/payroll" class="back-link">
+            <a href="/admin/employees" class="back-link">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -228,40 +206,198 @@
         </div>
 
         <form method="POST">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Cost to Company (Annual)</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">$</span>
-                        <input type="number" step="0.01" name="cost_to_company_annual" 
-                               value="{{ salary.cost_to_company_annual or 0 }}" required>
+
+            <!-- Personal Details -->
+            <div class="section">
+                <div class="section-title">Personal Details</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" value="{{ user.name or '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="{{ user.email or '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" name="phone" value="{{ user.phone or '' }}" required>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Basic Salary (Annual)</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">$</span>
-                        <input type="number" step="0.01" name="basic_annual" 
-                               value="{{ salary.basic_annual or 0 }}" required>
+            <!-- Profile Details -->
+            <div class="section">
+                <div class="section-title">Profile Details</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="date_of_birth"
+                               value="{{ emp_profile.date_of_birth.strftime('%Y-%m-%d') if emp_profile.date_of_birth else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender">
+                            <option value="" {{ 'selected' if not emp_profile.gender else '' }}>-- Select --</option>
+                            <option value="Male" {{ 'selected' if emp_profile.gender == 'Male' else '' }}>Male</option>
+                            <option value="Female" {{ 'selected' if emp_profile.gender == 'Female' else '' }}>Female</option>
+                            <option value="Other" {{ 'selected' if emp_profile.gender == 'Other' else '' }}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" name="city" value="{{ emp_profile.city or '' }}">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Address</label>
+                        <input type="text" name="address" value="{{ emp_profile.address or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <input type="text" name="department" value="{{ emp_profile.department or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Designation</label>
+                        <input type="text" name="designation" value="{{ emp_profile.designation or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Joining</label>
+                        <input type="date" name="date_of_joining"
+                               value="{{ emp_profile.date_of_joining.strftime('%Y-%m-%d') if emp_profile.date_of_joining else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Employment Type</label>
+                        <select name="employment_type">
+                            <option value="" {{ 'selected' if not emp_profile.employment_type else '' }}>-- Select --</option>
+                            <option value="Full-Time" {{ 'selected' if emp_profile.employment_type == 'Full-Time' else '' }}>Full-Time</option>
+                            <option value="Part-Time" {{ 'selected' if emp_profile.employment_type == 'Part-Time' else '' }}>Part-Time</option>
+                            <option value="Contract" {{ 'selected' if emp_profile.employment_type == 'Contract' else '' }}>Contract</option>
+                            <option value="Intern" {{ 'selected' if emp_profile.employment_type == 'Intern' else '' }}>Intern</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reporting Manager</label>
+                        <input type="text" name="reporting_manager" value="{{ emp_profile.reporting_manager or '' }}">
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>HRA (Annual)</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">$</span>
-                        <input type="number" step="0.01" name="hra_annual" 
-                               value="{{ salary.hra_annual or 0 }}" required>
+            <!-- Salary Details -->
+            <div class="section">
+                <div class="section-title">Salary Details (Annual)</div>
+                <p class="hint">Monthly figures are calculated automatically as Annual ÷ 12 when you save.</p>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Cost to Company</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="cost_to_company_annual"
+                                   value="{{ salary.cost_to_company_annual or 0 }}" required>
+                        </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Net Take Home (Annual)</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">$</span>
-                        <input type="number" step="0.01" name="net_salary_annual" 
-                               value="{{ salary.net_salary_annual or 0 }}" required>
+                    <div class="form-group">
+                        <label>Basic Salary</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="basic_annual"
+                                   value="{{ salary.basic_annual or 0 }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>HRA</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="hra_annual"
+                                   value="{{ salary.hra_annual or 0 }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Medical Allowance</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="medical_annual"
+                                   value="{{ salary.medical_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Special Allowance</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="special_allowance_annual"
+                                   value="{{ salary.special_allowance_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Telephone Allowance</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="telephone_annual"
+                                   value="{{ salary.telephone_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Conveyance</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="conveyance_annual"
+                                   value="{{ salary.conveyance_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ex-Gratia</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="ex_gratia_annual"
+                                   value="{{ salary.ex_gratia_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>PF (Employer)</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="pf_employer_annual"
+                                   value="{{ salary.pf_employer_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>PF (Employee)</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="pf_employee_annual"
+                                   value="{{ salary.pf_employee_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>ESI</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="esi_annual"
+                                   value="{{ salary.esi_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Labor Welfare</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="labor_welfare_annual"
+                                   value="{{ salary.labor_welfare_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Total (Gross)</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="total_annual"
+                                   value="{{ salary.total_annual or 0 }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Net Take Home</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input class="with-prefix" type="number" step="0.01" name="net_salary_annual"
+                                   value="{{ salary.net_salary_annual or 0 }}" required>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -270,7 +406,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-                Update Payroll
+                Save All Changes
             </button>
         </form>
     </div>

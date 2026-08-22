@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Leaves</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .back-btn {
+            background: #95a5a6;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-block;
+            padding: 6px 12px;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/admin/dashboard" class="back-btn">← Back</a>
+        <h2>Leave Requests</h2>
+        <table>
+            <tr>
+                <th>Employee ID</th>
+                <th>Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for leave in leaves %}
+            <tr>
+                <td>{{ leave.user.employee_id }}</td>
+                <td>{{ leave.leave_type }}</td>
+                <td>{{ leave.from_date }}</td>
+                <td>{{ leave.to_date }}</td>
+                <td>{{ leave.status }}</td>
+                <td>
+                    {% if leave.status == 'Pending' %}
+                    <form method="POST" action="/admin/leave/{{ leave.id }}/update" style="display:inline;">
+                        <button type="submit" name="action" value="Approved" class="btn btn-success">Approve</button>
+                        <button type="submit" name="action" value="Rejected" class="btn btn-danger">Reject</button>
+                    </form>
+                    {% else %} - {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>

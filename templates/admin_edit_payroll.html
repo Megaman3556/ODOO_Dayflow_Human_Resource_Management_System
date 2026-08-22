@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Payroll</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px;}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Payroll for {{ user.name }}</h2>
+    <form method="POST">
+        <div class="form-group"><label>Cost to Company (Annual)</label><input type="number" step="0.01" name="cost_to_company_annual" value="{{ salary.cost_to_company_annual or 0 }}" required></div>
+        <div class="form-group"><label>Basic Salary (Annual)</label><input type="number" step="0.01" name="basic_annual" value="{{ salary.basic_annual or 0 }}" required></div>
+        <div class="form-group"><label>HRA (Annual)</label><input type="number" step="0.01" name="hra_annual" value="{{ salary.hra_annual or 0 }}" required></div>
+        <div class="form-group"><label>Net Take Home (Annual)</label><input type="number" step="0.01" name="net_salary_annual" value="{{ salary.net_salary_annual or 0 }}" required></div>
+        <button type="submit" class="btn">Update Payroll</button>
+    </form>
+</div>
+</body>
+</html>

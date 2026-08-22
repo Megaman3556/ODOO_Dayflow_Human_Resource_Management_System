@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request,redirect, url_for
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
@@ -30,6 +30,31 @@ class User(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(20), nullable=False)  # employee / hr
     password = db.Column(db.String(255), nullable=False)
+
+class Attendance(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    check_in = db.Column(db.Time)
+
+    check_out = db.Column(db.Time)
+
+    status = db.Column(
+        db.String(20),
+        nullable=False,
+        default="Present"
+    )
 
 class Leave(db.Model):
 
@@ -289,6 +314,92 @@ def emp_payroll(emp_id):
     user=User.query.filter_by(employee_id=emp_id).first()
     user_id=user.id
     salary_details=Salary.query.filter_by(user_id=user_id).first()
-    return render_template("payroll.html",salary=salary_details)
+    return render_template("payroll.html",salary=salary_details,user=user)
+
+@app.route("/attendance/<emp_id>")
+def emp_attendance(emp_id):
+
+    user = User.query.filter_by(
+        employee_id=emp_id
+    ).first()
+
+    if not user:
+        return "User not found"
+
+    attendance = Attendance.query.filter_by(
+        user_id=user.id
+    ).order_by(
+        Attendance.date.desc()
+    ).all()
+
+    return render_template(
+        "attendance.html",
+        user=user,
+        attendance=attendance
+    )
+@app.route("/attendance/checkin/<emp_id>", methods=["POST"])
+def check_in(emp_id):
+
+    user = User.query.filter_by(
+        employee_id=emp_id
+    ).first()
+
+    if not user:
+        return "User not found"
+
+    today = date.today()
+
+    attendance = Attendance.query.filter_by(
+        user_id=user.id,
+        date=today
+    ).first()
+
+    if attendance:
+        return "Already checked in today"
+
+    attendance = Attendance(
+        user_id=user.id,
+        date=today,
+        check_in=datetime.now().time(),
+        status="Present"
+    )
+
+    db.session.add(attendance)
+    db.session.commit()
+
+    return redirect("/attendance/" + emp_id)
+
+@app.route("/attendance/checkout/<emp_id>", methods=["POST"])
+def check_out(emp_id):
+
+    user = User.query.filter_by(
+        employee_id=emp_id
+    ).first()
+
+    if not user:
+        return "User not found"
+
+    today = date.today()
+
+    attendance = Attendance.query.filter_by(
+        user_id=user.id,
+        date=today
+    ).first()
+
+    if not attendance:
+        return "Please check in first"
+
+    if attendance.check_out:
+        return "Already checked out today"
+
+    attendance.check_out = datetime.now().time()
+
+    db.session.commit()
+
+    return redirect("/attendance/" + emp_id)
+
+@app.route("/logout")
+def logout():
+    return redirect("/login")
 if __name__ == '__main__':
     app.run(debug=True)

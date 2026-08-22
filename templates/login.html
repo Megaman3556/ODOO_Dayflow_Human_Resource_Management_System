@@ -5,89 +5,298 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --accent: #c084fc;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-active: #7c3aed;
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header-area {
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            max-width: 160px;
+            height: auto;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            background: #ffffff;
+            color: var(--text-dark);
+        }
+
+        /* Floating Label Effect */
+        .form-group label {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 6px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            pointer-events: none;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .input-control:focus ~ label,
+        .input-control:not(:placeholder-shown) ~ label,
+        select.input-control ~ label {
+            top: 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .input-control:focus {
+            border-color: var(--border-active);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        /* Custom Select Arrow Styling */
+        select.input-control {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .input-control {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 16px -4px rgba(124, 58, 237, 0.4);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            margin-top: 24px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .footer-text a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div>
-        <img src="/static/HRM_Logo.png" alt="HRM Logo" width="300">
+    <div class="container">
+        <div class="header-area">
+            <img src="/static/HRM_Logo.png" alt="HRM Logo" class="logo">
+            <p class="subtitle">Welcome back! Please enter your details</p>
+        </div>
 
         <form method="POST" action="/login">
 
-            <div>
+            <div class="form-group">
+                <input type="text" id="employee_id" name="employee_id" class="input-control" placeholder=" " required>
                 <label for="employee_id">Employee ID</label>
-                <input
-                    type="text"
-                    id="employee_id"
-                    name="employee_id"
-                    required
-                    placeholder="Enter Employee ID">
             </div>
 
-            <br>
-
-            <div>
-                <label for="password">Password</label>
-
-                <div>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        placeholder="Enter Password">
-
-                    <button type="button" id="toggle-password">
-                        👁
+            <div class="form-group">
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" class="input-control" placeholder=" " required>
+                    <label for="password">Password</label>
+                    <button type="button" id="toggle-password" class="toggle-password" aria-label="Toggle password visibility">
+                        <svg class="eye-icon" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
                     </button>
                 </div>
             </div>
 
-            <br>
-
-            <div>
-                <label for="role">Role</label>
-
-                <select id="role" name="role" required>
-                    <option value="" disabled selected>Select Role</option>
+            <div class="form-group">
+                <select id="role" name="role" class="input-control" required>
+                    <option value="" disabled selected hidden></option>
                     <option value="employee">Employee</option>
                     <option value="hr">HR</option>
                 </select>
+                <label for="role">Role</label>
             </div>
 
-            <br>
-
-            <button type="submit">Login</button>
+            <button type="submit" class="btn-submit">Login</button>
 
         </form>
 
-        <p>
-            Don't have an account?
-            <a href="/">Sign Up</a>
+        <p class="footer-text">
+            Don't have an account? <a href="/">Sign Up</a>
         </p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
 
-            const togglePasswordBtn =
-                document.getElementById('toggle-password');
-
-            const passwordInput =
-                document.getElementById('password');
+            const eyeOpenSvg = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+            const eyeClosedSvg = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
 
             togglePasswordBtn.addEventListener('click', () => {
+                const svg = togglePasswordBtn.querySelector('svg');
 
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
-                    togglePasswordBtn.textContent = '🙈';
+                    svg.innerHTML = eyeClosedSvg;
                 } else {
                     passwordInput.type = 'password';
-                    togglePasswordBtn.textContent = '👁';
+                    svg.innerHTML = eyeOpenSvg;
                 }
-
             });
-
         });
     </script>
 

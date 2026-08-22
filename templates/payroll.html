@@ -4,100 +4,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payroll Details</title>
+    <title>Payroll Details - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --accent: #c084fc;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 850px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        /* Modern Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            background: #ffffff;
+        }
+
+        .data-table th {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover td {
+            background: rgba(245, 243, 255, 0.4);
+        }
+
+        /* Categorized Row Styling */
+        .row-category-header td {
+            background: #f8fafc;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 16px;
+        }
+
+        .row-highlight {
+            background: #fdfbfb;
+            font-weight: 700;
+        }
+
+        .row-highlight td {
+            color: var(--primary-hover);
+            border-top: 1.5px solid var(--border);
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .row-net-salary {
+            background: linear-gradient(135deg, var(--primary-light), #ffffff);
+            font-weight: 700;
+        }
+
+        .row-net-salary td {
+            color: var(--primary);
+            font-size: 1rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        .amount-col {
+            font-family: 'Plus Jakarta Sans', monospace;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .top-bar {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Salary Structure -->
-    <h2>Salary Structure</h2>
 
-    <table border="1">
+    <div class="container">
+        <div class="top-bar">
+            <div class="page-title">
+                <h1>Payroll Breakdown</h1>
+                <p>Detailed overview of salary structure and deductions</p>
+            </div>
+            <a href="/user/{{ user.employee_id }}" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Dashboard
+            </a>
+        </div>
 
-        <tr>
-            <th>Component</th>
-            <th>Per Annum</th>
-            <th>Per Month</th>
-        </tr>
+        <!-- Salary Structure Card -->
+        <div class="section-card">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Salary Components
+            </div>
 
-        <tr>
-            <td>Basic</td>
-            <td>{{ salary.basic_annual }}</td>
-            <td>{{ salary.basic_monthly }}</td>
-        </tr>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Per Annum</th>
+                            <th>Per Month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Earnings Group -->
+                        <tr class="row-category-header">
+                            <td colspan="3">Earnings & Allowances</td>
+                        </tr>
+                        <tr>
+                            <td>Basic</td>
+                            <td class="amount-col">{{ salary.basic_annual }}</td>
+                            <td class="amount-col">{{ salary.basic_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>HRA</td>
+                            <td class="amount-col">{{ salary.hra_annual }}</td>
+                            <td class="amount-col">{{ salary.hra_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Medical Allowance</td>
+                            <td class="amount-col">{{ salary.medical_annual }}</td>
+                            <td class="amount-col">{{ salary.medical_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Special Allowance</td>
+                            <td class="amount-col">{{ salary.special_allowance_annual }}</td>
+                            <td class="amount-col">{{ salary.special_allowance_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Telephone Allowance</td>
+                            <td class="amount-col">{{ salary.telephone_annual }}</td>
+                            <td class="amount-col">{{ salary.telephone_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Conveyance</td>
+                            <td class="amount-col">{{ salary.conveyance_annual }}</td>
+                            <td class="amount-col">{{ salary.conveyance_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ex-Gratia</td>
+                            <td class="amount-col">{{ salary.ex_gratia_annual }}</td>
+                            <td class="amount-col">{{ salary.ex_gratia_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>PF - Employer Contribution</td>
+                            <td class="amount-col">{{ salary.pf_employer_annual }}</td>
+                            <td class="amount-col">{{ salary.pf_employer_monthly }}</td>
+                        </tr>
 
-        <tr>
-            <td>HRA</td>
-            <td>{{ salary.hra_annual }}</td>
-            <td>{{ salary.hra_monthly }}</td>
-        </tr>
+                        <!-- Total Gross Row -->
+                        <tr class="row-highlight">
+                            <td>Total (Gross Salary)</td>
+                            <td class="amount-col">{{ salary.total_annual }}</td>
+                            <td class="amount-col">{{ salary.total_monthly }}</td>
+                        </tr>
 
-        <tr>
-            <td>Medical</td>
-            <td>{{ salary.medical_annual }}</td>
-            <td>{{ salary.medical_monthly }}</td>
-        </tr>
+                        <!-- Deductions Group -->
+                        <tr class="row-category-header">
+                            <td colspan="3">Deductions</td>
+                        </tr>
+                        <tr>
+                            <td>PF - Employee Contribution</td>
+                            <td class="amount-col">{{ salary.pf_employee_annual }}</td>
+                            <td class="amount-col">{{ salary.pf_employee_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>ESI</td>
+                            <td class="amount-col">{{ salary.esi_annual }}</td>
+                            <td class="amount-col">{{ salary.esi_monthly }}</td>
+                        </tr>
+                        <tr>
+                            <td>Labour Welfare Fund</td>
+                            <td class="amount-col">{{ salary.labor_welfare_annual }}</td>
+                            <td class="amount-col">{{ salary.labor_welfare_monthly }}</td>
+                        </tr>
 
-        <tr>
-            <td>Special Allowance</td>
-            <td>{{ salary.special_allowance_annual }}</td>
-            <td>{{ salary.special_allowance_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>Telephone</td>
-            <td>{{ salary.telephone_annual }}</td>
-            <td>{{ salary.telephone_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>Conveyance</td>
-            <td>{{ salary.conveyance_annual }}</td>
-            <td>{{ salary.conveyance_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>Ex-Gratia</td>
-            <td>{{ salary.ex_gratia_annual }}</td>
-            <td>{{ salary.ex_gratia_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>PF - Employer</td>
-            <td>{{ salary.pf_employer_annual }}</td>
-            <td>{{ salary.pf_employer_monthly }}</td>
-        </tr>
-
-        <tr>
-            <th>Total</th>
-            <th>{{ salary.total_annual }}</th>
-            <th>{{ salary.total_monthly }}</th>
-        </tr>
-
-        <tr>
-            <td>PF - Employee</td>
-            <td>{{ salary.pf_employee_annual }}</td>
-            <td>{{ salary.pf_employee_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>ESI</td>
-            <td>{{ salary.esi_annual }}</td>
-            <td>{{ salary.esi_monthly }}</td>
-        </tr>
-
-        <tr>
-            <td>Labour Welfare Fund</td>
-            <td>{{ salary.labor_welfare_annual }}</td>
-            <td>{{ salary.labor_welfare_monthly }}</td>
-        </tr>
-
-        <tr>
-            <th>Net Salary</th>
-            <th>{{ salary.net_salary_annual }}</th>
-            <th>{{ salary.net_salary_monthly }}</th>
-        </tr>
-
-    </table>
+                        <!-- Net Salary Row -->
+                        <tr class="row-net-salary">
+                            <td>Net Take-Home Salary</td>
+                            <td class="amount-col">{{ salary.net_salary_annual }}</td>
+                            <td class="amount-col">{{ salary.net_salary_monthly }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </body>
 

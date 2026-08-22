@@ -4,55 +4,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Request</title>
+    <title>Leave Request - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --accent: #c084fc;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-active: #7c3aed;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            text-align: left;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            background: #ffffff;
+            color: var(--text-dark);
+        }
+
+        textarea.input-control {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        /* Floating Label Effect */
+        .form-group label {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 6px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            pointer-events: none;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .form-group.textarea-group label {
+            top: 22px;
+        }
+
+        /* Active label state */
+        .input-control:focus ~ label,
+        .input-control:not(:placeholder-shown) ~ label,
+        select.input-control ~ label,
+        input[type="date"].input-control ~ label {
+            top: 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .input-control:focus {
+            border-color: var(--border-active);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        /* Custom Select Styling */
+        select.input-control {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 16px -4px rgba(124, 58, 237, 0.4);
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
+
+            .top-bar {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Leave Request</h1>
+    <div class="container">
+        <div class="top-bar">
+            <div class="page-title">
+                <h1>Apply for Leave</h1>
+                <p>Submit a new leave request for approval</p>
+            </div>
+            <a href="/user/{{ user.employee_id }}" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Dashboard
+            </a>
+        </div>
 
-    <form method="POST" action="/leave/{{ user.employee_id }}">
+        <div class="section-card">
+            <form method="POST" action="/leave/{{ user.employee_id }}">
+                <div class="form-grid">
 
-        <label for="leave_type">Leave Type:</label>
-        <select id="leave_type" name="leave_type" required>
-            <option value="">Select Leave Type</option>
-            <option value="Casual Leave">Casual Leave</option>
-            <option value="Sick Leave">Sick Leave</option>
-            <option value="Earned Leave">Earned Leave</option>
-            <option value="Unpaid Leave">Unpaid Leave</option>
-        </select>
+                    <div class="form-group full-width">
+                        <select id="leave_type" name="leave_type" class="input-control" required>
+                            <option value="" disabled selected hidden></option>
+                            <option value="Casual Leave">Casual Leave</option>
+                            <option value="Sick Leave">Sick Leave</option>
+                            <option value="Earned Leave">Earned Leave</option>
+                            <option value="Unpaid Leave">Unpaid Leave</option>
+                        </select>
+                        <label for="leave_type">Leave Type</label>
+                    </div>
 
-        <br><br>
+                    <div class="form-group">
+                        <input type="date" id="from_date" name="from_date" class="input-control" required>
+                        <label for="from_date">From Date</label>
+                    </div>
 
-        <label for="from_date">From Date:</label>
-        <input type="date" id="from_date" name="from_date" required>
+                    <div class="form-group">
+                        <input type="date" id="to_date" name="to_date" class="input-control" required>
+                        <label for="to_date">To Date</label>
+                    </div>
 
-        <br><br>
+                    <div class="form-group full-width textarea-group">
+                        <textarea id="remarks" name="remarks" class="input-control" placeholder=" "></textarea>
+                        <label for="remarks">Remarks / Reason for Leave</label>
+                    </div>
 
-        <label for="to_date">To Date:</label>
-        <input type="date" id="to_date" name="to_date" required>
+                </div>
 
-        <br><br>
-
-        <label for="remarks">Remarks:</label>
-        <br>
-        <textarea
-            id="remarks"
-            name="remarks"
-            rows="5"
-            cols="40"
-            placeholder="Enter reason for leave">
-        </textarea>
-
-        <br><br>
-
-        <button type="submit">Submit Leave Request</button>
-
-    </form>
-
-    <br>
-
-    <a href="/user/{{ user.employee_id }}">Back to Dashboard</a>
+                <button type="submit" class="btn-submit">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Submit Leave Request
+                </button>
+            </form>
+        </div>
+    </div>
 
 </body>
 

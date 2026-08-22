@@ -4,29 +4,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User</title>
+    <title>Dashboard - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --accent: #c084fc;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-welcome h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .user-welcome span {
+            color: var(--primary);
+        }
+
+        .user-welcome p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .nav-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px -6px rgba(124, 58, 237, 0.2);
+        }
+
+        .icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            transition: var(--transition);
+        }
+
+        .nav-card:hover .icon-wrapper {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .icon-wrapper svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2;
+        }
+
+        .nav-card .title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .nav-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1.5px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: #ffffff;
+            border-color: var(--danger);
+            box-shadow: 0 8px 16px -4px rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-area {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Hello {{user.name}}</h2>
-    <a href="/profile/{{user.employee_id}}">
-        Profile
-    </a>
-    <br><br>
-        <a href="/attendance/{{user.employee_id}}">
-        Attendance
-    </a>
-    <br><br>
-        <a href="/leave/{{user.employee_id}}">
-        Leave Requests
-    </a>
-        <br><br>
-        <a href="/payroll/{{user.employee_id}}">
-        View Payroll
-    <br><br>
-        <a href="/logout">
-        Logout
-    <br><br>
+
+    <div class="container">
+        <div class="header-area">
+            <div class="user-welcome">
+                <h2>Hello, <span>{{user.name}}</span> 👋</h2>
+                <p>Employee ID: {{user.employee_id}}</p>
+            </div>
+        </div>
+
+        <div class="nav-grid">
+            <a href="/profile/{{user.employee_id}}" class="nav-card">
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="title">Profile</div>
+                <div class="desc">View personal details</div>
+            </a>
+
+            <a href="/attendance/{{user.employee_id}}" class="nav-card">
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="title">Attendance</div>
+                <div class="desc">Track work hours & logs</div>
+            </a>
+
+            <a href="/leave/{{user.employee_id}}" class="nav-card">
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="title">Leave Requests</div>
+                <div class="desc">Apply or check leave status</div>
+            </a>
+
+            <a href="/payroll/{{user.employee_id}}" class="nav-card">
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="title">View Payroll</div>
+                <div class="desc">Salary slips & tax details</div>
+            </a>
+        </div>
+
+        <a href="/logout" class="logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+        </a>
+    </div>
+
 </body>
 
 </html>

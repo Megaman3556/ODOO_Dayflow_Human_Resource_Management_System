@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+    <img src="/static/HRM_Logo.png" alt="Image Not Found" width="300">
+
+    <form>
+
+        <label for="company">Company Name :-</label>
+        <input type="text" id="company" name="company">
+
+        <br><br>
+
+        <label for="employee-id">Employee ID :-</label>
+        <input type="text" id="employee-id" name="employee_id">
+
+        <br><br>
+
+        <label for="name">Name :-</label>
+        <input type="text" id="name" name="name">
+
+        <br><br>
+
+        <label for="email">Email :-</label>
+        <input type="email" id="email" name="email">
+
+        <br><br>
+
+        <label for="phone">Phone :-</label>
+        <input type="tel" id="phone" name="phone">
+
+        <br><br>
+
+        <label for="role">Role :-</label>
+        <select id="role" name="role">
+            <option value="">Select Role</option>
+            <option value="employee">Employee</option>
+            <option value="hr">HR</option>
+        </select>
+
+        <br><br>
+
+        <label for="password">Password :-</label>
+        <input type="password" id="password" name="password">
+
+        <button type="button">👁</button>
+
+        <br><br>
+
+        <label for="confirm-password">Confirm Password :-</label>
+        <input type="password" id="confirm-password" name="confirm-password">
+
+        <button type="button">👁</button>
+
+        <br><br>
+
+        <button type="submit">Sign Up</button>
+
+    </form>
+
+    <p>Already have an account? <a href="/login">Sign In</a></p>
+</body>
+
+</html>

@@ -139,10 +139,14 @@ def login():
         password = request.form.get("password")
         role = request.form.get("role", "").strip().upper()
         
-        user = User.query.filter_by(employee_id=employee_id, password=password, role=role).first()
+        user = User.query.filter(
+            db.func.upper(User.role) == role,
+            User.employee_id == employee_id,
+            User.password == password,
+        ).first()
         if user:
             login_user(user) # Secure session
-            if user.role == "HR":
+            if user.role.strip().upper() == "HR":
                 return redirect(url_for("admin_dashboard"))
             return redirect(url_for("user", employee_id=user.employee_id))
         return render_template("error.html", message="Invalid credentials")
@@ -256,6 +260,7 @@ def admin_employees():
 def admin_edit_employee(emp_id):
     user = User.query.filter_by(employee_id=emp_id).first()
     emp_profile = EmployeeProfile.query.filter_by(user_id=user.id).first()
+    salary=Salary.query.filter_by(id=user.id).first()
     if not emp_profile:
         emp_profile = EmployeeProfile(user_id=user.id)
         db.session.add(emp_profile)
@@ -270,7 +275,7 @@ def admin_edit_employee(emp_id):
         emp_profile.designation = request.form.get("designation")
         db.session.commit()
         return redirect(url_for("admin_employees"))
-    return render_template("admin_edit_employee.html", user=user, emp_profile=emp_profile)
+    return render_template("admin_edit_employee.html", user=user, emp_profile=emp_profile,salary=salary)
 
 # Step 2: Leave Management
 @app.route("/admin/leaves")

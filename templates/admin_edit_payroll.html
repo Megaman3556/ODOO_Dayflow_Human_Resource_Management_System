@@ -1,25 +1,274 @@
 <!DOCTYPE html>
-<html>
-<head><title>Edit Payroll</title>
-<style>
-    body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
-    .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    .btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px;}
-</style>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Payroll - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5;
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px 12px 32px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            background: #ffffff;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        /* Submit Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 16px -4px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -4px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .top-bar {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="container">
-    <h2>Edit Payroll for {{ user.name }}</h2>
-    <form method="POST">
-        <div class="form-group"><label>Cost to Company (Annual)</label><input type="number" step="0.01" name="cost_to_company_annual" value="{{ salary.cost_to_company_annual or 0 }}" required></div>
-        <div class="form-group"><label>Basic Salary (Annual)</label><input type="number" step="0.01" name="basic_annual" value="{{ salary.basic_annual or 0 }}" required></div>
-        <div class="form-group"><label>HRA (Annual)</label><input type="number" step="0.01" name="hra_annual" value="{{ salary.hra_annual or 0 }}" required></div>
-        <div class="form-group"><label>Net Take Home (Annual)</label><input type="number" step="0.01" name="net_salary_annual" value="{{ salary.net_salary_annual or 0 }}" required></div>
-        <button type="submit" class="btn">Update Payroll</button>
-    </form>
-</div>
+
+    <div class="container">
+        <div class="top-bar">
+            <div class="page-title">
+                <h2>Edit Payroll</h2>
+                <p>Updating profile for <strong>{{ user.name }}</strong></p>
+            </div>
+            <a href="/admin/payroll" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+        </div>
+
+        <form method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Cost to Company (Annual)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" step="0.01" name="cost_to_company_annual" value="{{ salary.cost_to_company_annual or 0 }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Basic Salary (Annual)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" step="0.01" name="basic_annual" value="{{ salary.basic_annual or 0 }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>HRA (Annual)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" step="0.01" name="hra_annual" value="{{ salary.hra_annual or 0 }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Net Take Home (Annual)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" step="0.01" name="net_salary_annual" value="{{ salary.net_salary_annual or 0 }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Update Payroll
+            </button>
+        </form>
+    </div>
+
 </body>
+
 </html>

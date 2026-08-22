@@ -1,88 +1,279 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>View Attendance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Attendance - HRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f7f6;
+        :root {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f5f3ff;
+            --bg-gradient: linear-gradient(-45deg, #4c1d95, #6d28d9, #7c3aed, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Status Colors */
+            --present-bg: #ecfdf5;
+            --present-text: #047857;
+            --absent-bg: #fef2f2;
+            --absent-text: #b91c1c;
+            --late-bg: #fffbeeb;
+            --late-text: #b45309;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            color: #333;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            width: 100%;
             max-width: 1000px;
-            margin: auto;
-            background: #fff;
-            padding: 25px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 14px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            background: var(--primary-light);
+            transition: var(--transition);
         }
 
-        h2 {
-            margin-top: 0;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
         }
 
-        table {
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5;
+        }
+
+        /* Modern Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: #ffffff;
+        }
+
+        .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
             text-align: left;
         }
 
-        th {
-            background: #f8f9fa;
-            color: #2c3e50;
+        .data-table th {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1.5px solid var(--border);
         }
 
-        .back-btn {
-            background: #95a5a6;
-            text-decoration: none;
-            margin-bottom: 15px;
-            display: inline-block;
-            padding: 6px 12px;
-            color: white;
-            border-radius: 5px;
+        .data-table td {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(245, 243, 255, 0.4);
+        }
+
+        .emp-id {
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--primary-hover);
+        }
+
+        .emp-name {
+            font-weight: 600;
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-present, .badge-Present {
+            background: var(--present-bg);
+            color: var(--present-text);
+        }
+
+        .badge-absent, .badge-Absent {
+            background: var(--absent-bg);
+            color: var(--absent-text);
+        }
+
+        .badge-late, .badge-Late {
+            background: var(--late-bg);
+            color: var(--late-text);
+        }
+
+        /* Fallback for unmapped status */
+        .badge-default {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            .top-bar {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                gap: 16px;
+            }
         }
     </style>
 </head>
 
 <body>
+
     <div class="container">
-        <a href="/admin/dashboard" class="back-btn">← Back</a>
-        <h2>All Attendance Records</h2>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Check In</th>
-                <th>Check Out</th>
-                <th>Status</th>
-            </tr>
-            {% for att in attendance_records %}
-            <tr>
-                <td>{{ att.date }}</td>
-                <td>{{ att.user.employee_id }}</td>
-                <td>{{ att.user.name }}</td>
-                <td>{{ att.check_in }}</td>
-                <td>{{ att.check_out or '-' }}</td>
-                <td>{{ att.status }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="top-bar">
+            <div class="page-title">
+                <h1>Attendance Records</h1>
+                <p>System-wide check-in and check-out logs</p>
+            </div>
+            <a href="/admin/dashboard" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Dashboard
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for att in attendance_records %}
+                    <tr>
+                        <td>{{ att.date }}</td>
+                        <td class="emp-id">{{ att.user.employee_id }}</td>
+                        <td class="emp-name">{{ att.user.name }}</td>
+                        <td>{{ att.check_in }}</td>
+                        <td>{{ att.check_out or '-' }}</td>
+                        <td>
+                            <span class="badge badge-{{ att.status|default('default') }}">
+                                {{ att.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                            No attendance records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </body>
 
 </html>

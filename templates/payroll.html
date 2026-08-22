@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Details</title>
+</head>
+
+<body>
+    <!-- Salary Structure -->
+    <h2>Salary Structure</h2>
+
+    <table border="1">
+
+        <tr>
+            <th>Component</th>
+            <th>Per Annum</th>
+            <th>Per Month</th>
+        </tr>
+
+        <tr>
+            <td>Basic</td>
+            <td>{{ salary.basic_annual }}</td>
+            <td>{{ salary.basic_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>HRA</td>
+            <td>{{ salary.hra_annual }}</td>
+            <td>{{ salary.hra_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Medical</td>
+            <td>{{ salary.medical_annual }}</td>
+            <td>{{ salary.medical_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Special Allowance</td>
+            <td>{{ salary.special_allowance_annual }}</td>
+            <td>{{ salary.special_allowance_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Telephone</td>
+            <td>{{ salary.telephone_annual }}</td>
+            <td>{{ salary.telephone_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Conveyance</td>
+            <td>{{ salary.conveyance_annual }}</td>
+            <td>{{ salary.conveyance_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Ex-Gratia</td>
+            <td>{{ salary.ex_gratia_annual }}</td>
+            <td>{{ salary.ex_gratia_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>PF - Employer</td>
+            <td>{{ salary.pf_employer_annual }}</td>
+            <td>{{ salary.pf_employer_monthly }}</td>
+        </tr>
+
+        <tr>
+            <th>Total</th>
+            <th>{{ salary.total_annual }}</th>
+            <th>{{ salary.total_monthly }}</th>
+        </tr>
+
+        <tr>
+            <td>PF - Employee</td>
+            <td>{{ salary.pf_employee_annual }}</td>
+            <td>{{ salary.pf_employee_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>ESI</td>
+            <td>{{ salary.esi_annual }}</td>
+            <td>{{ salary.esi_monthly }}</td>
+        </tr>
+
+        <tr>
+            <td>Labour Welfare Fund</td>
+            <td>{{ salary.labor_welfare_annual }}</td>
+            <td>{{ salary.labor_welfare_monthly }}</td>
+        </tr>
+
+        <tr>
+            <th>Net Salary</th>
+            <th>{{ salary.net_salary_annual }}</th>
+            <th>{{ salary.net_salary_monthly }}</th>
+        </tr>
+
+    </table>
+
+</body>
+
+</html>

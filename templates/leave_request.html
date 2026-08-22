@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Request</title>
+</head>
+
+<body>
+
+    <h1>Leave Request</h1>
+
+    <form method="POST" action="/leave/{{ user.employee_id }}">
+
+        <label for="leave_type">Leave Type:</label>
+        <select id="leave_type" name="leave_type" required>
+            <option value="">Select Leave Type</option>
+            <option value="Casual Leave">Casual Leave</option>
+            <option value="Sick Leave">Sick Leave</option>
+            <option value="Earned Leave">Earned Leave</option>
+            <option value="Unpaid Leave">Unpaid Leave</option>
+        </select>
+
+        <br><br>
+
+        <label for="from_date">From Date:</label>
+        <input type="date" id="from_date" name="from_date" required>
+
+        <br><br>
+
+        <label for="to_date">To Date:</label>
+        <input type="date" id="to_date" name="to_date" required>
+
+        <br><br>
+
+        <label for="remarks">Remarks:</label>
+        <br>
+        <textarea
+            id="remarks"
+            name="remarks"
+            rows="5"
+            cols="40"
+            placeholder="Enter reason for leave">
+        </textarea>
+
+        <br><br>
+
+        <button type="submit">Submit Leave Request</button>
+
+    </form>
+
+    <br>
+
+    <a href="/user/{{ user.employee_id }}">Back to Dashboard</a>
+
+</body>
+
+</html>

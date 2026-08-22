@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profile</title>
+</head>
+
+<body>
+
+    <h1>Employee Profile</h1>
+
+    <!-- Personal Details -->
+    <h2>Personal Details</h2>
+
+    <p>Name: {{ user.name }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Phone: {{ user.phone }}</p>
+    <p>Date of Birth: {{ emp_profile.date_of_birth }}</p>
+    <p>Gender: {{ emp_profile.gender }}</p>
+    <p>Address: {{ emp_profile.address }}</p>
+    <p>City: {{ emp_profile.city }}</p>
+
+    <hr>
+
+    <!-- Job Details -->
+    <h2>Job Details</h2>
+
+    <p>Employee ID: {{ user.employee_id }}</p>
+    <p>Department: {{ emp_profile.department }}</p>
+    <p>Designation: {{ emp_profile.designation }}</p>
+    <p>Date of Joining: {{ emp_profile.date_of_joining }}</p>
+    <p>Employment Type: {{ emp_profile.employment_type }}</p>
+    <p>Reporting Manager: {{ emp_profile.reporting_manager }}</p>
+
+    <hr>
+
+    <h2>Net Salary</h2>
+    <p>{{ salary.net_salary_annual }}</p>
+    <p>{{ salary.net_salary_monthly }}</p>
+
+    <hr>
+
+    <!-- Edit Profile -->
+    <h2>Edit Profile</h2>
+
+    <form method="POST" action="/profile/edit/{{ user.employee_id }}" enctype="multipart/form-data">
+
+        <label>Phone:</label>
+        <input type="text" name="phone" value="{{ user.phone }}">
+
+        <br><br>
+
+        <label>Address:</label>
+        <input type="text" name="address" value="{{ emp_profile.address }}">
+
+        <br><br>
+
+        <button type="submit">Update Profile</button>
+
+    </form>
+
+    <br>
+
+    <a href="/user/{{ user.employee_id }}">Back to Dashboard</a>
+
+</body>
+
+</html>
